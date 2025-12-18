@@ -118,4 +118,10 @@ public class Category {
             }
         }
     }
+    // 관리자 전체 상품 현황
+    public void allProductsInfo() {
+        for (int i = 0; i < products.size(); i++) {
+            System.out.println((i + 1) + ". " + products.get(i).presetNamTapPriDes());
+        }
+    }
 }
