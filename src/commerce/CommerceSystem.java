@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CommerceSystem {
+    // TODO start안은 최대한 메서드로 구현?
     Scanner sc = new Scanner(System.in);
     // 장바구니 TODO 장바구니 클래스 생성?
     private List<Product> cart = new ArrayList<>();
@@ -148,7 +149,6 @@ public class CommerceSystem {
                             while (true) {
                                 // 카테고리에 상품 추가
                                 // TODO 0.관리자 모드로 돌아가기 기능 추가?
-                                // TODO 상품을 추가하고 나서도 재고 토큰 정상 작동?
                                 System.out.println("어느 카테고리에 상품을 추가하시겠습니까?");
                                 System.out.println("1. " + electronics.getCategoryName());
                                 System.out.println("2. " + clothes.getCategoryName());
@@ -171,6 +171,7 @@ public class CommerceSystem {
                             break;
                         case 2:
                             // 상품 수정
+                            // TODO 예외가 너무 많음
                             System.out.print("수정할 상품명을 입력해주세요: ");
                             sc.nextLine();
                             String editProductName = sc.nextLine();
@@ -235,7 +236,6 @@ public class CommerceSystem {
                             break;
                         case 4:
                             // 전체 상품 현황
-                            // TODO 0. 관리자 모드 메인으로 돌아가기 구현?
                             all.allProductsInfo();
                             System.out.print("아무거나 입력하세요 (관리자 모드 메인으로 돌아가기): ");
                             sc.next();
