@@ -1,29 +1,30 @@
 package commerce;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class CommerceSystem {
     Scanner sc = new Scanner(System.in);
     // 카테고리 생성
-    Category electronics = new Category("전자제품");
-    Category clothes = new Category("의류");
-    Category foods = new Category("식품");
-    // 상품 목록
-    List<Product> products = new ArrayList<>();
-
-    // 상품 추가
-    public void addProduct(Product product) {
-        products.add(product);
+    private Category electronics = new Category("전자제품");
+    private Category clothes = new Category("의류");
+    private Category foods = new Category("식품");
+    // 카테고리 값 반환
+    public Category getElectronics() {
+        return electronics;
+    }
+    public Category getClothes() {
+        return clothes;
+    }
+    public Category getFoods() {
+        return foods;
     }
 
     // 콘솔 기능
     public void start() {
         while (true) {
             System.out.println("[ 실시간 커머스 플랫폼 메인 ]");
-            System.out.println("1. " + electronics.categoryName + "\n2. " +
-                    clothes.categoryName + "\n3. " + foods.categoryName);
+            System.out.println("1. " + electronics.getCategoryName() + "\n2. " +
+                    clothes.getCategoryName() + "\n3. " + foods.getCategoryName());
             System.out.println("0. 종료 \t\t\t| 프로그램 종료");
             System.out.print("번호를 입력해주세요: ");
             int categoryId = sc.nextInt();
@@ -64,18 +65,18 @@ public class CommerceSystem {
     }
     // 선택한 카테고리의 상품 메뉴판
     public void productMenu(Category c) {
-        System.out.println("[ " + c.categoryName + " 카테고리 ]");
-        for (int i = 0; i < c.products.size(); i++) {
-            System.out.println((i + 1) + ". " + c.products.get(i).name + "\t| " +
-                    c.products.get(i).price + " | " + c.products.get(i).description);
+        System.out.println("[ " + c.getCategoryName() + " 카테고리 ]");
+        for (int i = 0; i < c.getProductsCount(); i++) {
+            System.out.println((i + 1) + ". " + c.getProducts(i).getName() + "\t| " +
+                    c.getProducts(i).getPrice() + " | " + c.getProducts(i).getDescription());
         }
         System.out.println("0. 뒤로가기");
     }
     // 선택한 상품 정보
     public void productInfo(Category c, int num) {
-        System.out.println("선택한 상품: " + c.products.get(num - 1).name + " | " +
-                c.products.get(num - 1).price + " | " +
-                c.products.get(num - 1).description + " | 재고: " +
-                c.products.get(num - 1).inventory + "개");
+        System.out.println("선택한 상품: " + c.getProducts(num - 1).getName() + " | " +
+                c.getProducts(num - 1).getPrice() + " | " +
+                c.getProducts(num - 1).getDescription() + " | 재고: " +
+                c.getProducts(num - 1).getInventory() + "개");
     }
 }
