@@ -66,10 +66,13 @@ public class Category {
     // 관리자 상품 추가 기능
     public void productAdd(Scanner sc) {
         System.out.println("[ " + categoryName + " 카테고리에 상품 추가 ]");
-        // TODO 중복 상품명 검증 (같은 카테고리 내에서)
         System.out.print("상품명을 입력해주세요: ");
         sc.nextLine();
         String addName = sc.nextLine();
+        if (products.stream().anyMatch(n -> n.getName().equals(addName))) {
+            System.out.println("이미 동일한 이름의 제품이 존재합니다.");
+            return;
+        }
         System.out.print("가격을 입력해주세요: ");
         int addPrice = sc.nextInt();
         System.out.print("상품 설명을 입력해주세요: ");
