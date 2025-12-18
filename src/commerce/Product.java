@@ -31,15 +31,34 @@ public class Product {
     public int getInventoryToken() {
         return inventoryToken;
     }
-    // 가격 세번째마다 컴마 표시
-    public String setPriceWon() {
-        return String.format("%,d", price);
-    }
     // 세터로 필드 수정
     public void setInventory(int inventory) {
         this.inventory = inventory;
     }
+    public void plusOneToken() {
+        this.inventoryToken += 1;
+    }
     public void setInventoryTokenZero() {
         this.inventoryToken = 0;
+    }
+    // 가격 세번째마다 컴마 표시
+    public String setPriceWon() {
+        return String.format("%,d", price);
+    }
+    // 상품명 | 가격 | 설명 | 재고 프리셋1
+    public String presetNamPriDesInv() {
+        return name + " | " + setPriceWon() + "원 | " + description + " | 재고: " + inventory + "개";
+    }
+    // 상품명 | 가격 | 설명 | 재고 프리셋1 -2
+    public String presetNamTapPriDesInv() {
+        return name + "\t| " + setPriceWon() + "원 | " + description + " | 재고: " + inventory + "개";
+    }
+    // 상품명 | 가격 | 설명 | 프리셋2
+    public String presetNamPriDes() {
+        return name + " | " + setPriceWon() + "원 | " + description;
+    }
+    // 상품명 | 가격 | 설명 | 프리셋2 -2
+    public String presetNamTapPriDes() {
+        return name + "\t| " + setPriceWon() + "원 | " + description;
     }
 }
