@@ -63,4 +63,37 @@ public class Category {
             }
         }
     }
+    // 관리자 상품 추가 기능
+    public void productAdd(Scanner sc) {
+        System.out.println("[ " + categoryName + " 카테고리에 상품 추가 ]");
+        // TODO 중복 상품명 검증 (같은 카테고리 내에서)
+        System.out.print("상품명을 입력해주세요: ");
+        sc.nextLine();
+        String addName = sc.nextLine();
+        System.out.print("가격을 입력해주세요: ");
+        int addPrice = sc.nextInt();
+        System.out.print("상품 설명을 입력해주세요: ");
+        sc.nextLine();
+        String addDescription = sc.nextLine();
+        System.out.print("재고수량을 입력해주세요: ");
+        int addInventory = sc.nextInt();
+        while (true) {
+            System.out.println("\n" + addName + " | " + String.format("%,d", addPrice) + "원 | " +
+                    addDescription + " | 재고: " + addInventory + "개");
+            System.out.println("위 정보로 상품을 추가하시겠습니까?");
+            System.out.println("1. 확인\t2.취소");
+            System.out.print("번호를 입력해주세요: ");
+            switch (sc.nextInt()) {
+                case 1:
+                    System.out.println("성공적으로 상품이 추가되었습니다.");
+                    products.add(new Product(addName, addPrice, addDescription, addInventory));
+                    return;
+                case 2:
+                    System.out.println("상품 추가가 취소되었습니다.");
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
 }
