@@ -170,6 +170,47 @@ public class CommerceSystem {
                             break;
                         case 2:
                             // 상품 수정
+                            // TODO 상품 수정 시 장바구니에 담긴 상품도 수정됨?
+                            System.out.print("수정할 상품명을 입력해주세요: ");
+                            sc.nextLine();
+                            String editProductName = sc.nextLine();
+                            List<Product> edit = all.searchProduct(editProductName);
+                            while (true) {
+                                System.out.println("현재 상품 정보: " + edit.get(0).presetNamPriDesInv());
+                                System.out.println("\n어느 항목을 수정하시겠습니까?");
+                                // TODO 0. 관리자 모드로 돌아가기? 구현?
+                                System.out.println("1. 가격\n2. 설명\n3. 재고수량");
+                                System.out.print("번호를 입력해주세요: ");
+                                int productEditNumber = sc.nextInt();
+                                if (productEditNumber == 1) {
+                                    System.out.println("현재 가격: " + edit.get(0).setPriceWon() + "원");
+                                    System.out.print("새로운 가격을 입력해주세요: ");
+                                    int editPrice = sc.nextInt();
+                                    System.out.println("\n" + edit.get(0).getName() + "의 가격이 " +
+                                            edit.get(0).setPriceWon() + "원 -> " + String.format("%,d", editPrice) + "원으로 수정되었습니다.");
+                                    edit.get(0).setPrice(editPrice);
+                                    break;
+                                } else if (productEditNumber == 2) {
+                                    System.out.println("현재 설명: " + edit.get(0).getDescription());
+                                    System.out.print("새로운 설명을 입력해주세요: ");
+                                    sc.nextLine();
+                                    String editDescription = sc.nextLine();
+                                    System.out.println("\n" + edit.get(0).getName() + "의 설명이 " +
+                                            edit.get(0).getDescription() + " -> " + editDescription + "(으)로 수정되었습니다.");
+                                    edit.get(0).setDescription(editDescription);
+                                    break;
+                                } else if (productEditNumber == 3) {
+                                    System.out.println("현재 재고수량: " + edit.get(0).getInventory() + "개");
+                                    System.out.print("새로운 재고수량을 입력해주세요: ");
+                                    int editInventory = sc.nextInt();
+                                    System.out.println("\n" + edit.get(0).getName() + "의 재고수량이 " +
+                                            edit.get(0).getInventory() + "개 -> " + editInventory + "개로 수정되었습니다.");
+                                    edit.get(0).setInventory(editInventory);
+                                    break;
+                                } else {
+                                    System.out.println("잘못된 입력입니다.");
+                                }
+                            }
                             break;
                         case 3:
                             // 상품 삭제
