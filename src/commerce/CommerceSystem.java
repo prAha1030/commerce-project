@@ -102,6 +102,10 @@ public class CommerceSystem {
                     }
                     cart.clear();
                     break;
+                // 관리자 모드
+                case 6:
+                    adminMenu();
+                    break;
                 default:
                     System.out.println("잘못된 입력입니다.");
             }
@@ -120,6 +124,46 @@ public class CommerceSystem {
                 c.productInfo(productId, sc, cart);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
+    // 관리자 모드
+    public void adminMenu() {
+        int failCount = 0;
+        while (failCount <= 2) {
+            System.out.print("관리자 비밀번호를 입력해주세요: ");
+            String password = sc.next();
+            // 현재 관리자 비번 admin123 / TODO 관리자 비밀번호 설정 기능 구현
+            if (password.equals("admin123")) {
+                while (true) {
+                    System.out.println("[ 관리자 모드 ]");
+                    System.out.println("1. 상품 추가");
+                    System.out.println("2. 상품 수정");
+                    System.out.println("3. 상품 삭제");
+                    System.out.println("4. 전체 상품 현황");
+                    System.out.println("0. 메인으로 돌아가기");
+                    System.out.print("번호를 입력해주세요: ");
+                    switch (sc.nextInt()) {
+                        case 1:
+                            // 상품 추가
+                            break;
+                        case 2:
+                            // 상품 수정
+                            break;
+                        case 3:
+                            // 상품 삭제
+                            break;
+                        case 4:
+                            // 전체 상품 현황
+                            break;
+                        case 0:
+                            return;
+                        default:
+                            System.out.println("잘못된 입력입니다.");
+                    }
+                }
+            } else {
+                failCount += 1;
             }
         }
     }
