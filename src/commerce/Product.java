@@ -32,6 +32,12 @@ public class Product {
         return inventoryToken;
     }
     // 세터로 필드 수정
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
     public void setInventory(int inventory) {
         this.inventory = inventory;
     }
