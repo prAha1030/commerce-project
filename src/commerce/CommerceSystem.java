@@ -145,7 +145,28 @@ public class CommerceSystem {
                     System.out.print("번호를 입력해주세요: ");
                     switch (sc.nextInt()) {
                         case 1:
-                            // 상품 추가
+                            while (true) {
+                                // 카테고리에 상품 추가
+                                // TODO 0.관리자 모드로 돌아가기 기능 추가?
+                                System.out.println("어느 카테고리에 상품을 추가하시겠습니까?");
+                                System.out.println("1. " + electronics.getCategoryName());
+                                System.out.println("2. " + clothes.getCategoryName());
+                                System.out.println("3. " + foods.getCategoryName());
+                                System.out.print("번호를 입력해주세요: ");
+                                int productAddNumber =  sc.nextInt();
+                                if (productAddNumber == 1) {
+                                    electronics.productAdd(sc);
+                                    break;
+                                } else if (productAddNumber == 2) {
+                                    clothes.productAdd(sc);
+                                    break;
+                                } else if (productAddNumber == 3) {
+                                    foods.productAdd(sc);
+                                    break;
+                                } else {
+                                    System.out.println("잘못된 입력입니다.");
+                                }
+                            }
                             break;
                         case 2:
                             // 상품 수정
