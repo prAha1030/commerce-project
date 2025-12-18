@@ -2,6 +2,7 @@ package commerce;
 
 public class Main {
     public static void main(String[] args) {
+        // TODO 약어 일관성 통일
         CommerceSystem cs = new CommerceSystem();
         Customer customer1 = new Customer("ez", "a1b2c3@gmail.com", "Bronze");
         // 전자제품 상품 생성

@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class CommerceSystem {
     // TODO start안은 최대한 메서드로 구현?
     Scanner sc = new Scanner(System.in);
-    // 장바구니 TODO 장바구니 클래스 생성?
+    // 장바구니
     private List<Product> cart = new ArrayList<>();
     // 카테고리 생성
     private Category all = new Category("전체");
@@ -41,20 +41,20 @@ public class CommerceSystem {
                 System.out.println("5. 주문 취소\t\t| 진행중인 주문을 취소합니다.");
             }
             System.out.print("번호를 입력해주세요: ");
-            int categoryId = sc.nextInt();
-            if (categoryId == 0) {
+            int startNumber = sc.nextInt();
+            if (startNumber == 0) {
                 System.out.println("커머스 플랫폼을 종료합니다");
                 return;
             }
-            switch (categoryId) {
+            switch (startNumber) {
                 case 1:
-                    menuAndInfo(electronics);
+                    filterMenu(electronics);
                     break;
                 case 2:
-                    menuAndInfo(clothes);
+                    filterMenu(clothes);
                     break;
                 case 3:
-                    menuAndInfo(foods);
+                    filterMenu(foods);
                     break;
                 case 4:
                     if (cart.isEmpty()) {
@@ -112,8 +112,40 @@ public class CommerceSystem {
             }
         }
     }
-    // 카테고리 선택 후 상품 선택 메뉴얼
-    public void menuAndInfo(Category c) {
+    // 카테고리 선택 후 필터링 선택
+    private void filterMenu(Category c) {
+        while (true) {
+            System.out.println("[ " + c.getCategoryName() + " 카테고리 ]");
+            System.out.println("1. 전체 상품 보기");
+            System.out.println("2. 가격대별 필터링 (100만원 이하)");
+            System.out.println("3. 가격대별 필터링 (100만원 초과)");
+            System.out.println("0. 뒤로가기");
+            System.out.print("번호를 입력해주세요: ");
+            int filterNumber = sc.nextInt();
+            if (filterNumber == 0) {
+                break;
+            }
+            switch (filterNumber) {
+                case 1:
+                    System.out.println("[ 전체 상품 목록 ]");
+                    menuAndInfo(c);
+                    break;
+                case 2:
+                    System.out.println("[ 100만원 이하 상품 목록 ]");
+                    menuAndInfoFilter(c, c.filterDownPrice());
+                    break;
+                case 3:
+                    System.out.println("[ 100만원 이상 상품 목록]");
+                    menuAndInfoFilter(c, c.filterUpPrice());
+                    break;
+                default:
+                    System.out.println("잘못된 입력입니다.");
+                    break;
+            }
+        }
+    }
+    // 카테고리별 전체 상품 선택 메뉴얼
+    private void menuAndInfo(Category c) {
         while (true) {
             c.productMenu();
             System.out.print("번호를 입력해주세요: ");
@@ -128,8 +160,24 @@ public class CommerceSystem {
             }
         }
     }
+    // 카테고리별 필터링 상품 선택 메뉴얼
+    private void menuAndInfoFilter(Category c, List<Product> p) {
+        while (true) {
+            c.productMenuFilter(p);
+            System.out.print("번호를 입력해주세요: ");
+            int productId = sc.nextInt();
+            if (productId == 0) {
+                break;
+            }
+            try {
+                c.productInfoFilter(p, productId, sc, cart);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
     // 관리자 모드
-    public void adminMenu() {
+    private void adminMenu() {
         int failCount = 0;
         while (failCount <= 2) {
             System.out.print("관리자 비밀번호를 입력해주세요: ");
@@ -252,7 +300,7 @@ public class CommerceSystem {
         }
     }
     // 카테고리 선택 후 상품 삭제 메뉴얼
-    public void menuAndDelete(Category c) {
+    private void menuAndDelete(Category c) {
         while (true) {
             c.productMenu();
             System.out.print("번호를 입력해주세요: ");
