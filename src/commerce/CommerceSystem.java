@@ -148,6 +148,7 @@ public class CommerceSystem {
                             while (true) {
                                 // 카테고리에 상품 추가
                                 // TODO 0.관리자 모드로 돌아가기 기능 추가?
+                                // TODO 상품을 추가하고 나서도 재고 토큰 정상 작동?
                                 System.out.println("어느 카테고리에 상품을 추가하시겠습니까?");
                                 System.out.println("1. " + electronics.getCategoryName());
                                 System.out.println("2. " + clothes.getCategoryName());
@@ -213,7 +214,6 @@ public class CommerceSystem {
                             break;
                         case 3:
                             // 상품 삭제
-                            // TODO 카테고리에서 상품 선택 -> 삭제 전 확인 -> 장바구니도 동일 제거
                             System.out.println("어느 카테고리의 상품을 삭제하시겠습니까?");
                             System.out.println("1. " + electronics.getCategoryName());
                             System.out.println("2. " + clothes.getCategoryName());
@@ -221,25 +221,13 @@ public class CommerceSystem {
                             System.out.print("번호를 입력해주세요: ");
                             int productDeleteNumber = sc.nextInt();
                             if (productDeleteNumber == 1) {
-                                while (true) {
-                                    electronics.productMenu();
-                                    System.out.print("번호를 입력해주세요: ");
-                                    int productId = sc.nextInt();
-                                    if (productId == 0) {
-                                        break;
-                                    }
-                                    try {
-                                        electronics.productDelete(productId, sc, cart);
-                                    } catch (IndexOutOfBoundsException e) {
-                                        System.out.println("잘못된 입력입니다.");
-                                    }
-                                }
+                                menuAndDelete(electronics);
                                 break;
                             } else if (productDeleteNumber == 2) {
-//                                clothes.productDelete(sc);
+                                menuAndDelete(clothes);
                                 break;
                             } else if (productDeleteNumber == 3) {
-//                                foods.productDelete(sc);
+                                menuAndDelete(foods);
                                 break;
                             } else {
                                 System.out.println("잘못된 입력입니다.");
@@ -247,6 +235,10 @@ public class CommerceSystem {
                             break;
                         case 4:
                             // 전체 상품 현황
+                            // TODO 0. 관리자 모드 메인으로 돌아가기 구현?
+                            all.allProductsInfo();
+                            System.out.print("아무거나 입력하세요 (관리자 모드 메인으로 돌아가기): ");
+                            sc.next();
                             break;
                         case 0:
                             return;
@@ -256,6 +248,22 @@ public class CommerceSystem {
                 }
             } else {
                 failCount += 1;
+            }
+        }
+    }
+    // 카테고리 선택 후 상품 삭제 메뉴얼
+    public void menuAndDelete(Category c) {
+        while (true) {
+            c.productMenu();
+            System.out.print("번호를 입력해주세요: ");
+            int productId = sc.nextInt();
+            if (productId == 0) {
+                break;
+            }
+            try {
+                c.productDelete(productId, sc, cart);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("잘못된 입력입니다.");
             }
         }
     }
