@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         // TODO 약어 일관성 통일
         CommerceSystem cs = new CommerceSystem();
-        Customer customer1 = new Customer("ez", "a1b2c3@gmail.com", "Bronze");
+        Customer customer1 = new Customer("ez", "a1b2c3@gmail.com");
         // 전자제품 상품 생성
         cs.getElectronics().addProduct(new Product("Galaxy S25", 1200000, "최신 안드로이드 스마트폰", 30));
         cs.getElectronics().addProduct(new Product("iPhone 16", 1350000, "Apple의 최신 스마트폰", 30));
