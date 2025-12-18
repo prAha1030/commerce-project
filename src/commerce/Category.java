@@ -96,4 +96,26 @@ public class Category {
             }
         }
     }
+    // 관리자 상품 삭제 기능
+    public void productDelete(int num, Scanner sc, List<Product> cart) {
+        while (true) {
+            System.out.println("선택한 상품: " + products.get(num -1).presetNamPriDesInv());
+            System.out.println("\"" + products.get(num - 1).presetNamPriDes() + "\"");
+            System.out.println("위 상품을 정말 삭제하시겠습니까?");
+            System.out.println("1. 확인 \t\t 2. 취소");
+            System.out.print("번호를 입력해주세요: ");
+            switch (sc.nextInt()) {
+                case 1:
+                    System.out.println(products.get(num - 1).getName() + "이(가) 삭제되었습니다.");
+                    cart.remove(products.get(num - 1));
+                    products.remove(num - 1);
+                    return;
+                case 2:
+                    System.out.println("선택한 상품 삭제가 취소되었습니다.");
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
 }

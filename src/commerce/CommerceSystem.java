@@ -170,7 +170,6 @@ public class CommerceSystem {
                             break;
                         case 2:
                             // 상품 수정
-                            // TODO 상품 수정 시 장바구니에 담긴 상품도 수정됨?
                             System.out.print("수정할 상품명을 입력해주세요: ");
                             sc.nextLine();
                             String editProductName = sc.nextLine();
@@ -214,6 +213,37 @@ public class CommerceSystem {
                             break;
                         case 3:
                             // 상품 삭제
+                            // TODO 카테고리에서 상품 선택 -> 삭제 전 확인 -> 장바구니도 동일 제거
+                            System.out.println("어느 카테고리의 상품을 삭제하시겠습니까?");
+                            System.out.println("1. " + electronics.getCategoryName());
+                            System.out.println("2. " + clothes.getCategoryName());
+                            System.out.println("3. " + foods.getCategoryName());
+                            System.out.print("번호를 입력해주세요: ");
+                            int productDeleteNumber = sc.nextInt();
+                            if (productDeleteNumber == 1) {
+                                while (true) {
+                                    electronics.productMenu();
+                                    System.out.print("번호를 입력해주세요: ");
+                                    int productId = sc.nextInt();
+                                    if (productId == 0) {
+                                        break;
+                                    }
+                                    try {
+                                        electronics.productDelete(productId, sc, cart);
+                                    } catch (IndexOutOfBoundsException e) {
+                                        System.out.println("잘못된 입력입니다.");
+                                    }
+                                }
+                                break;
+                            } else if (productDeleteNumber == 2) {
+//                                clothes.productDelete(sc);
+                                break;
+                            } else if (productDeleteNumber == 3) {
+//                                foods.productDelete(sc);
+                                break;
+                            } else {
+                                System.out.println("잘못된 입력입니다.");
+                            }
                             break;
                         case 4:
                             // 전체 상품 현황
