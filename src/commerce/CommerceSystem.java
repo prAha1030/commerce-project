@@ -61,37 +61,8 @@ public class CommerceSystem {
                         System.out.println("잘못된 입력입니다.");
                         break;
                     }
-                    while (true) {
-                        System.out.println("아래와 같이 주문 하시겠습니까?\n");
-                        System.out.println("[ 장바구니 내역 ]");
-                        for (Product p : cart.stream().distinct().toList()) {
-                            System.out.println(p.getName() + "\t| " + p.setPriceWon() + "원 | " +
-                                    p.getDescription() + " | 수량: " + cart.stream().filter(n -> n == p).count() + "개");
-                        }
-                        System.out.println("\n[ 총 주문 금액 ]");
-                        int totalPrice = cart.stream().mapToInt(Product::getPrice).sum();
-                        System.out.println(String.format("%,d", totalPrice) + "원");
-                        System.out.println("\n1. 주문 확정 \t\t 2. 메인으로 돌아가기");
-                        System.out.print("번호를 입력해주세요: ");
-                        int finalPrice = sc.nextInt();
-                        if (finalPrice == 1) {
-                            System.out.println("주문이 완료되었습니다! 총 금액: " + String.format("%,d", totalPrice) + "원");
-                            for (Product p : cart.stream().distinct().toList()) {
-                                System.out.println(p.getName() + "의 재고가 " + p.getInventory() + "개 -> " +
-                                        (p.getInventory() - p.getInventoryToken()) + "개로 업데이트되었습니다.");
-                                p.setInventory(p.getInventory() - p.getInventoryToken());
-                            }
-                            for (Product p : cart) {
-                                p.setInventoryTokenZero();
-                            }
-                            cart.clear();
-                            break;
-                        } else if (finalPrice == 2) {
-                            break;
-                        } else {
-                            System.out.println("잘못된 입력입니다.");
-                        }
-                    } break;
+                    cartcheck();
+                    break;
                 case 5:
                     if (cart.isEmpty()) {
                         System.out.println("잘못된 입력입니다.");
@@ -111,6 +82,69 @@ public class CommerceSystem {
                     System.out.println("잘못된 입력입니다.");
             }
         }
+    }
+    // 장바구니 확인
+    private void cartcheck() {
+        while (true) {
+            System.out.println("아래와 같이 주문 하시겠습니까?\n");
+            System.out.println("[ 장바구니 내역 ]");
+            for (Product p : cart.stream().distinct().toList()) {
+                System.out.println(p.presetNamTapPriDes() + " | 수량: " + p.getInventoryToken() + "개");
+            }
+            System.out.println("\n[ 총 주문 금액 ]");
+            int totalPrice = cart.stream().mapToInt(Product::getPrice).sum();
+            System.out.println(String.format("%,d", totalPrice) + "원");
+            System.out.println("\n1. 주문 확정 \t\t 2. 메인으로 돌아가기");
+            System.out.print("번호를 입력해주세요: ");
+            int finalPrice = sc.nextInt();
+            if (finalPrice == 1) {
+                while (true) {
+                    System.out.println("[ 실시간 커머스 고객 등급 ]");
+                    System.out.println("1. " + Customer.Grade.BRONZE + "\t:\t " + Customer.Grade.BRONZE.getSale() + "% 할인");
+                    System.out.println("2. " + Customer.Grade.SILVER + "\t:\t " + Customer.Grade.SILVER.getSale() + "% 할인");
+                    System.out.println("3. " + Customer.Grade.GOLD + " \t:\t" + Customer.Grade.GOLD.getSale() + "% 할인");
+                    System.out.println("4. " + Customer.Grade.PLATINUM + "\t:\t" + Customer.Grade.PLATINUM.getSale() + "% 할인");
+                    System.out.print("고객 등급을 입력해주세요: ");
+                    // TODO switch문 적용?
+                    int customerGrade = sc.nextInt();
+                    if (customerGrade == 1) {
+                        payment(totalPrice, Customer.Grade.BRONZE);
+                        return;
+                    } else if (customerGrade == 2) {
+                        payment(totalPrice, Customer.Grade.SILVER);
+                        return;
+                    } else if (customerGrade == 3) {
+                        payment(totalPrice, Customer.Grade.GOLD);
+                        return;
+                    } else if (customerGrade == 4) {
+                        payment(totalPrice, Customer.Grade.PLATINUM);
+                        return;
+                    } else {
+                        System.out.println("잘못된 입력입니다.");
+                    }
+                }
+            } else if (finalPrice == 2) {
+                break;
+            } else {
+                System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
+    // 등급별 할인 적용
+    public void payment(int price, Customer.Grade grade) {
+        System.out.println("주문이 완료되었습니다!");
+        System.out.println("할인 전 금액: " + String.format("%,d", price) + "원");
+        System.out.println(grade + " 등급 할인(" + grade.getSale() + "%): -" + String.format("%,d", grade.salePrice(price)) + "원");
+        System.out.println("최종 결제 금액: " + String.format("%,d", price - grade.salePrice(price)) + "원");
+        for (Product p : cart.stream().distinct().toList()) {
+            System.out.println(p.getName() + "의 재고가 " + p.getInventory() + "개 -> " +
+                    (p.getInventory() - p.getInventoryToken()) + "개로 업데이트되었습니다.");
+            p.setInventory(p.getInventory() - p.getInventoryToken());
+        }
+        for (Product p : cart) {
+            p.setInventoryTokenZero();
+        }
+        cart.clear();
     }
     // 카테고리 선택 후 필터링 선택
     private void filterMenu(Category c) {
