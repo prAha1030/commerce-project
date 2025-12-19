@@ -44,9 +44,9 @@ public class Category {
         System.out.println("0. 뒤로가기");
     }
     // 선택한 카테고리의 필터링된 상품 메뉴판
-    public void productMenuFilter(List<Product> products) {
-        for (int i = 0; i < products.size(); i++) {
-            System.out.println((i + 1) + ". " + products.get(i).presetNamTapPriDes());
+    public void productMenuFilter(List<Product> filterProducts) {
+        for (int i = 0; i < filterProducts.size(); i++) {
+            System.out.println((i + 1) + ". " + filterProducts.get(i).presetNamTapPriDes());
         }
         System.out.println("0. 뒤로가기");
     }
@@ -149,7 +149,7 @@ public class Category {
             switch (sc.nextInt()) {
                 case 1:
                     System.out.println(products.get(num - 1).getName() + "이(가) 삭제되었습니다.");
-                    cart.remove(products.get(num - 1));
+                    cart.removeAll(cart.stream().filter(n -> n == products.get(num -1 )).toList());
                     products.remove(num - 1);
                     return;
                 case 2:

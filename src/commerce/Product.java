@@ -1,7 +1,7 @@
 package commerce;
 
 public class Product {
-    // 상품명, 가격, 설명, 재고
+    // 상품명, 가격, 설명, 재고, 장바구니에 담긴 수량
     private String name;
     private int price;
     private String description;
