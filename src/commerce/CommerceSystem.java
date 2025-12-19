@@ -1,11 +1,11 @@
 package commerce;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class CommerceSystem {
-    // TODO start안은 최대한 메서드로 구현?
     Scanner sc = new Scanner(System.in);
     // 장바구니
     private List<Product> cart = new ArrayList<>();
@@ -74,7 +74,6 @@ public class CommerceSystem {
                     }
                     cart.clear();
                     break;
-                // 관리자 모드
                 case 6:
                     adminMenu();
                     break;
@@ -256,12 +255,11 @@ public class CommerceSystem {
     // 관리자 모드 1번 상품 추가 페이지
     private void adminProductAdd() {
         while (true) {
-            // 카테고리에 상품 추가
-            // TODO 0.관리자 모드로 돌아가기 기능 추가?
             System.out.println("어느 카테고리에 상품을 추가하시겠습니까?");
             System.out.println("1. " + electronics.getCategoryName());
             System.out.println("2. " + clothes.getCategoryName());
             System.out.println("3. " + foods.getCategoryName());
+            System.out.println("0. 뒤로가기");
             System.out.print("번호를 입력해주세요: ");
             switch (sc.nextInt()) {
                 case 1:
@@ -273,6 +271,8 @@ public class CommerceSystem {
                 case 3:
                     foods.productAdd(sc);
                     return;
+                case 0:
+                    return;
                 default:
                     System.out.println("잘못된 입력입니다.");
             }
@@ -283,65 +283,73 @@ public class CommerceSystem {
         System.out.print("수정할 상품명을 입력해주세요: ");
         sc.nextLine();
         String editProductName = sc.nextLine();
-        // TODO 불일치 시 예외 처리
         List<Product> edit = all.searchProduct(editProductName);
+        if (edit.isEmpty()) {
+            System.out.println("존재하지 않는 상품입니다.");
+            return;
+        }
         while (true) {
             System.out.println("현재 상품 정보: " + edit.get(0).presetNamPriDesInv());
             System.out.println("\n어느 항목을 수정하시겠습니까?");
-            // TODO 0. 관리자 모드로 돌아가기? 구현?
-            System.out.println("1. 가격\n2. 설명\n3. 재고수량");
+            System.out.println("1. 가격\n2. 설명\n3. 재고수량\n0. 취소");
             System.out.print("번호를 입력해주세요: ");
-            int productEditNumber = sc.nextInt();
-            if (productEditNumber == 1) {
-                System.out.println("현재 가격: " + edit.get(0).setPriceWon() + "원");
-                System.out.print("새로운 가격을 입력해주세요: ");
-                int editPrice = sc.nextInt();
-                System.out.println("\n" + edit.get(0).getName() + "의 가격이 " +
-                        edit.get(0).setPriceWon() + "원 -> " + String.format("%,d", editPrice) + "원으로 수정되었습니다.");
-                edit.get(0).setPrice(editPrice);
-                break;
-            } else if (productEditNumber == 2) {
-                System.out.println("현재 설명: " + edit.get(0).getDescription());
-                System.out.print("새로운 설명을 입력해주세요: ");
-                sc.nextLine();
-                String editDescription = sc.nextLine();
-                System.out.println("\n" + edit.get(0).getName() + "의 설명이 " +
-                        edit.get(0).getDescription() + " -> " + editDescription + "(으)로 수정되었습니다.");
-                edit.get(0).setDescription(editDescription);
-                break;
-            } else if (productEditNumber == 3) {
-                System.out.println("현재 재고수량: " + edit.get(0).getInventory() + "개");
-                System.out.print("새로운 재고수량을 입력해주세요: ");
-                int editInventory = sc.nextInt();
-                System.out.println("\n" + edit.get(0).getName() + "의 재고수량이 " +
-                        edit.get(0).getInventory() + "개 -> " + editInventory + "개로 수정되었습니다.");
-                edit.get(0).setInventory(editInventory);
-                break;
-            } else {
-                System.out.println("잘못된 입력입니다.");
+            switch (sc.nextInt()) {
+                case 1:
+                    System.out.println("현재 가격: " + edit.get(0).setPriceWon() + "원");
+                    System.out.print("새로운 가격을 입력해주세요: ");
+                    int editPrice = sc.nextInt();
+                    System.out.println("\n" + edit.get(0).getName() + "의 가격이 " +
+                            edit.get(0).setPriceWon() + "원 -> " + String.format("%,d", editPrice) + "원으로 수정되었습니다.");
+                    edit.get(0).setPrice(editPrice);
+                    return;
+                case 2:
+                    System.out.println("현재 설명: " + edit.get(0).getDescription());
+                    System.out.print("새로운 설명을 입력해주세요: ");
+                    sc.nextLine();
+                    String editDescription = sc.nextLine();
+                    System.out.println("\n" + edit.get(0).getName() + "의 설명이 " +
+                            edit.get(0).getDescription() + " -> " + editDescription + "(으)로 수정되었습니다.");
+                    edit.get(0).setDescription(editDescription);
+                    return;
+                case 3:
+                    System.out.println("현재 재고수량: " + edit.get(0).getInventory() + "개");
+                    System.out.print("새로운 재고수량을 입력해주세요: ");
+                    int editInventory = sc.nextInt();
+                    System.out.println("\n" + edit.get(0).getName() + "의 재고수량이 " +
+                            edit.get(0).getInventory() + "개 -> " + editInventory + "개로 수정되었습니다.");
+                    edit.get(0).setInventory(editInventory);
+                    return;
+                case 0:
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다.");
             }
         }
     }
-    // 관리잠 모드 3번 상품 삭제 페이지
+    // 관리자 모드 3번 상품 삭제 페이지
     private void adminProductDelete() {
-        // TODO 0. 관리자 모드 메인으로 돌아가기 구현? -> 구현 시 menuAndDelete에서 뒤로 가기 시 이 페이지로 오도록 구현
-        System.out.println("어느 카테고리의 상품을 삭제하시겠습니까?");
-        System.out.println("1. " + electronics.getCategoryName());
-        System.out.println("2. " + clothes.getCategoryName());
-        System.out.println("3. " + foods.getCategoryName());
-        System.out.print("번호를 입력해주세요: ");
-        switch (sc.nextInt()) {
-            case 1:
-                menuAndDelete(electronics);
-                break;
-            case 2:
-                menuAndDelete(clothes);
-                break;
-            case 3:
-                menuAndDelete(foods);
-                break;
-            default:
-                System.out.println("잘못된 입력입니다.");
+        while (true) {
+            System.out.println("어느 카테고리의 상품을 삭제하시겠습니까?");
+            System.out.println("1. " + electronics.getCategoryName());
+            System.out.println("2. " + clothes.getCategoryName());
+            System.out.println("3. " + foods.getCategoryName());
+            System.out.println("0. 뒤로가기");
+            System.out.print("번호를 입력해주세요: ");
+            switch (sc.nextInt()) {
+                case 1:
+                    menuAndDelete(electronics);
+                    break;
+                case 2:
+                    menuAndDelete(clothes);
+                    break;
+                case 3:
+                    menuAndDelete(foods);
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다.");
+            }
         }
     }
     // 카테고리 선택 후 상품 삭제 기능
