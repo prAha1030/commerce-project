@@ -6,13 +6,13 @@ import java.util.Scanner;
 
 public class Category {
     private String categoryName;
-    // 상품 목록
+    // 상품 저장공간
     private List<Product> products = new ArrayList<>();
 
     public Category(String categoryName) {
         this.categoryName = categoryName;
     }
-    // 카테고리 조회
+    // 카테고리 이름 조회
     public String getCategoryName() {
         return categoryName;
     }
@@ -43,14 +43,14 @@ public class Category {
         }
         System.out.println("0. 뒤로가기");
     }
-    // 선택한 카테고리의 필터 상품 메뉴판
+    // 선택한 카테고리의 필터링된 상품 메뉴판
     public void productMenuFilter(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
             System.out.println((i + 1) + ". " + products.get(i).presetNamTapPriDes());
         }
         System.out.println("0. 뒤로가기");
     }
-    // 선택한 상품 정보 + 장바구니 추가
+    // 전체 상품 중 선택한 상품 정보 + 장바구니 추가
     public void productInfo(int num, Scanner sc, List<Product> cart) {
         if (products.get(num -1).getInventoryToken() == products.get(num -1).getInventory()) {
             System.out.println("선택한 상품은 더 이상 재고가 없습니다!");
@@ -76,23 +76,23 @@ public class Category {
             }
         }
     }
-    // 선택한 상품 정보 + 장바구니 추가
-    public void productInfoFilter(List<Product> products, int num, Scanner sc, List<Product> cart) {
-        if (products.get(num -1).getInventoryToken() == products.get(num -1).getInventory()) {
+    // 필터링된 상품 중 선택한 상품 정보 + 장바구니 추가
+    public void productInfoFilter(List<Product> filterProducts, int num, Scanner sc, List<Product> cart) {
+        if (filterProducts.get(num -1).getInventoryToken() == filterProducts.get(num -1).getInventory()) {
             System.out.println("선택한 상품은 더 이상 재고가 없습니다!");
             return;
         }
         while (true) {
-            System.out.println("선택한 상품: " + products.get(num -1).presetNamPriDesInv());
-            System.out.println("\"" + products.get(num - 1).presetNamPriDes() + "\"");
+            System.out.println("선택한 상품: " + filterProducts.get(num -1).presetNamPriDesInv());
+            System.out.println("\"" + filterProducts.get(num - 1).presetNamPriDes() + "\"");
             System.out.println("위 상품을 장바구니에 추가하시겠습니까?");
             System.out.println("1. 확인 \t\t 2. 취소");
             System.out.print("번호를 입력해주세요: ");
             switch (sc.nextInt()) {
                 case 1:
-                    cart.add(products.get(num - 1));
-                    products.get(num - 1).plusOneToken();
-                    System.out.println(products.get(num - 1).getName() + "이(가) 장바구니에 추가되었습니다.");
+                    cart.add(filterProducts.get(num - 1));
+                    filterProducts.get(num - 1).plusOneToken();
+                    System.out.println(filterProducts.get(num - 1).getName() + "이(가) 장바구니에 추가되었습니다.");
                     return;
                 case 2:
                     System.out.println("장바구니 추가가 취소되었습니다.");
