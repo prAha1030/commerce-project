@@ -83,69 +83,6 @@ public class CommerceSystem {
             }
         }
     }
-    // 장바구니 확인
-    private void cartcheck() {
-        while (true) {
-            System.out.println("아래와 같이 주문 하시겠습니까?\n");
-            System.out.println("[ 장바구니 내역 ]");
-            for (Product p : cart.stream().distinct().toList()) {
-                System.out.println(p.presetNamTapPriDes() + " | 수량: " + p.getInventoryToken() + "개");
-            }
-            System.out.println("\n[ 총 주문 금액 ]");
-            int totalPrice = cart.stream().mapToInt(Product::getPrice).sum();
-            System.out.println(String.format("%,d", totalPrice) + "원");
-            System.out.println("\n1. 주문 확정 \t\t 2. 메인으로 돌아가기");
-            System.out.print("번호를 입력해주세요: ");
-            int finalPrice = sc.nextInt();
-            if (finalPrice == 1) {
-                while (true) {
-                    System.out.println("[ 실시간 커머스 고객 등급 ]");
-                    System.out.println("1. " + Customer.Grade.BRONZE + "\t:\t " + Customer.Grade.BRONZE.getSale() + "% 할인");
-                    System.out.println("2. " + Customer.Grade.SILVER + "\t:\t " + Customer.Grade.SILVER.getSale() + "% 할인");
-                    System.out.println("3. " + Customer.Grade.GOLD + " \t:\t" + Customer.Grade.GOLD.getSale() + "% 할인");
-                    System.out.println("4. " + Customer.Grade.PLATINUM + "\t:\t" + Customer.Grade.PLATINUM.getSale() + "% 할인");
-                    System.out.print("고객 등급을 입력해주세요: ");
-                    // TODO switch문 적용?
-                    int customerGrade = sc.nextInt();
-                    if (customerGrade == 1) {
-                        payment(totalPrice, Customer.Grade.BRONZE);
-                        return;
-                    } else if (customerGrade == 2) {
-                        payment(totalPrice, Customer.Grade.SILVER);
-                        return;
-                    } else if (customerGrade == 3) {
-                        payment(totalPrice, Customer.Grade.GOLD);
-                        return;
-                    } else if (customerGrade == 4) {
-                        payment(totalPrice, Customer.Grade.PLATINUM);
-                        return;
-                    } else {
-                        System.out.println("잘못된 입력입니다.");
-                    }
-                }
-            } else if (finalPrice == 2) {
-                break;
-            } else {
-                System.out.println("잘못된 입력입니다.");
-            }
-        }
-    }
-    // 등급별 할인 적용
-    public void payment(int price, Customer.Grade grade) {
-        System.out.println("주문이 완료되었습니다!");
-        System.out.println("할인 전 금액: " + String.format("%,d", price) + "원");
-        System.out.println(grade + " 등급 할인(" + grade.getSale() + "%): -" + String.format("%,d", grade.salePrice(price)) + "원");
-        System.out.println("최종 결제 금액: " + String.format("%,d", price - grade.salePrice(price)) + "원");
-        for (Product p : cart.stream().distinct().toList()) {
-            System.out.println(p.getName() + "의 재고가 " + p.getInventory() + "개 -> " +
-                    (p.getInventory() - p.getInventoryToken()) + "개로 업데이트되었습니다.");
-            p.setInventory(p.getInventory() - p.getInventoryToken());
-        }
-        for (Product p : cart) {
-            p.setInventoryTokenZero();
-        }
-        cart.clear();
-    }
     // 카테고리 선택 후 필터링 선택
     private void filterMenu(Category c) {
         while (true) {
@@ -174,7 +111,6 @@ public class CommerceSystem {
                     break;
                 default:
                     System.out.println("잘못된 입력입니다.");
-                    break;
             }
         }
     }
@@ -210,6 +146,68 @@ public class CommerceSystem {
             }
         }
     }
+    // 장바구니 확인
+    private void cartcheck() {
+        while (true) {
+            System.out.println("아래와 같이 주문 하시겠습니까?\n");
+            System.out.println("[ 장바구니 내역 ]");
+            for (Product p : cart.stream().distinct().toList()) {
+                System.out.println(p.presetNamTapPriDes() + " | 수량: " + p.getInventoryToken() + "개");
+            }
+            System.out.println("\n[ 총 주문 금액 ]");
+            int totalPrice = cart.stream().mapToInt(Product::getPrice).sum();
+            System.out.println(String.format("%,d", totalPrice) + "원");
+            System.out.println("\n1. 주문 확정 \t\t 2. 메인으로 돌아가기");
+            System.out.print("번호를 입력해주세요: ");
+            int finalPrice = sc.nextInt();
+            if (finalPrice == 1) {
+                while (true) {
+                    System.out.println("[ 실시간 커머스 고객 등급 ]");
+                    System.out.println("1. " + Customer.Grade.BRONZE + "\t:\t " + Customer.Grade.BRONZE.getSale() + "% 할인");
+                    System.out.println("2. " + Customer.Grade.SILVER + "\t:\t " + Customer.Grade.SILVER.getSale() + "% 할인");
+                    System.out.println("3. " + Customer.Grade.GOLD + " \t:\t" + Customer.Grade.GOLD.getSale() + "% 할인");
+                    System.out.println("4. " + Customer.Grade.PLATINUM + "\t:\t" + Customer.Grade.PLATINUM.getSale() + "% 할인");
+                    System.out.print("고객 등급을 입력해주세요: ");
+                    switch (sc.nextInt()) {
+                        case 1:
+                            payment(totalPrice, Customer.Grade.BRONZE);
+                            return;
+                        case 2:
+                            payment(totalPrice, Customer.Grade.SILVER);
+                            return;
+                        case 3:
+                            payment(totalPrice, Customer.Grade.GOLD);
+                            return;
+                        case 4:
+                            payment(totalPrice, Customer.Grade.PLATINUM);
+                            return;
+                        default:
+                            System.out.println("잘못된 입력입니다.");
+                    }
+                }
+            } else if (finalPrice == 2) {
+                break;
+            } else {
+                System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
+    // 등급별 할인 적용
+    public void payment(int price, Customer.Grade grade) {
+        System.out.println("주문이 완료되었습니다!");
+        System.out.println("할인 전 금액: " + String.format("%,d", price) + "원");
+        System.out.println(grade + " 등급 할인(" + grade.getSale() + "%): -" + String.format("%,d", grade.salePrice(price)) + "원");
+        System.out.println("최종 결제 금액: " + String.format("%,d", price - grade.salePrice(price)) + "원");
+        for (Product p : cart.stream().distinct().toList()) {
+            System.out.println(p.getName() + "의 재고가 " + p.getInventory() + "개 -> " +
+                    (p.getInventory() - p.getInventoryToken()) + "개로 업데이트되었습니다.");
+            p.setInventory(p.getInventory() - p.getInventoryToken());
+        }
+        for (Product p : cart) {
+            p.setInventoryTokenZero();
+        }
+        cart.clear();
+    }
     // 관리자 모드
     private void adminMenu() {
         int failCount = 0;
@@ -228,93 +226,15 @@ public class CommerceSystem {
                     System.out.print("번호를 입력해주세요: ");
                     switch (sc.nextInt()) {
                         case 1:
-                            while (true) {
-                                // 카테고리에 상품 추가
-                                // TODO 0.관리자 모드로 돌아가기 기능 추가?
-                                System.out.println("어느 카테고리에 상품을 추가하시겠습니까?");
-                                System.out.println("1. " + electronics.getCategoryName());
-                                System.out.println("2. " + clothes.getCategoryName());
-                                System.out.println("3. " + foods.getCategoryName());
-                                System.out.print("번호를 입력해주세요: ");
-                                int productAddNumber =  sc.nextInt();
-                                if (productAddNumber == 1) {
-                                    electronics.productAdd(sc);
-                                    break;
-                                } else if (productAddNumber == 2) {
-                                    clothes.productAdd(sc);
-                                    break;
-                                } else if (productAddNumber == 3) {
-                                    foods.productAdd(sc);
-                                    break;
-                                } else {
-                                    System.out.println("잘못된 입력입니다.");
-                                }
-                            }
+                            adminProductAdd();
                             break;
                         case 2:
                             // 상품 수정
-                            // TODO 예외가 너무 많음
-                            System.out.print("수정할 상품명을 입력해주세요: ");
-                            sc.nextLine();
-                            String editProductName = sc.nextLine();
-                            List<Product> edit = all.searchProduct(editProductName);
-                            while (true) {
-                                System.out.println("현재 상품 정보: " + edit.get(0).presetNamPriDesInv());
-                                System.out.println("\n어느 항목을 수정하시겠습니까?");
-                                // TODO 0. 관리자 모드로 돌아가기? 구현?
-                                System.out.println("1. 가격\n2. 설명\n3. 재고수량");
-                                System.out.print("번호를 입력해주세요: ");
-                                int productEditNumber = sc.nextInt();
-                                if (productEditNumber == 1) {
-                                    System.out.println("현재 가격: " + edit.get(0).setPriceWon() + "원");
-                                    System.out.print("새로운 가격을 입력해주세요: ");
-                                    int editPrice = sc.nextInt();
-                                    System.out.println("\n" + edit.get(0).getName() + "의 가격이 " +
-                                            edit.get(0).setPriceWon() + "원 -> " + String.format("%,d", editPrice) + "원으로 수정되었습니다.");
-                                    edit.get(0).setPrice(editPrice);
-                                    break;
-                                } else if (productEditNumber == 2) {
-                                    System.out.println("현재 설명: " + edit.get(0).getDescription());
-                                    System.out.print("새로운 설명을 입력해주세요: ");
-                                    sc.nextLine();
-                                    String editDescription = sc.nextLine();
-                                    System.out.println("\n" + edit.get(0).getName() + "의 설명이 " +
-                                            edit.get(0).getDescription() + " -> " + editDescription + "(으)로 수정되었습니다.");
-                                    edit.get(0).setDescription(editDescription);
-                                    break;
-                                } else if (productEditNumber == 3) {
-                                    System.out.println("현재 재고수량: " + edit.get(0).getInventory() + "개");
-                                    System.out.print("새로운 재고수량을 입력해주세요: ");
-                                    int editInventory = sc.nextInt();
-                                    System.out.println("\n" + edit.get(0).getName() + "의 재고수량이 " +
-                                            edit.get(0).getInventory() + "개 -> " + editInventory + "개로 수정되었습니다.");
-                                    edit.get(0).setInventory(editInventory);
-                                    break;
-                                } else {
-                                    System.out.println("잘못된 입력입니다.");
-                                }
-                            }
+                            adminProductEdit();
                             break;
                         case 3:
                             // 상품 삭제
-                            System.out.println("어느 카테고리의 상품을 삭제하시겠습니까?");
-                            System.out.println("1. " + electronics.getCategoryName());
-                            System.out.println("2. " + clothes.getCategoryName());
-                            System.out.println("3. " + foods.getCategoryName());
-                            System.out.print("번호를 입력해주세요: ");
-                            int productDeleteNumber = sc.nextInt();
-                            if (productDeleteNumber == 1) {
-                                menuAndDelete(electronics);
-                                break;
-                            } else if (productDeleteNumber == 2) {
-                                menuAndDelete(clothes);
-                                break;
-                            } else if (productDeleteNumber == 3) {
-                                menuAndDelete(foods);
-                                break;
-                            } else {
-                                System.out.println("잘못된 입력입니다.");
-                            }
+                            adminProductDelete();
                             break;
                         case 4:
                             // 전체 상품 현황
@@ -333,7 +253,98 @@ public class CommerceSystem {
             }
         }
     }
-    // 카테고리 선택 후 상품 삭제 메뉴얼
+    // 관리자 모드 1번 상품 추가 페이지
+    private void adminProductAdd() {
+        while (true) {
+            // 카테고리에 상품 추가
+            // TODO 0.관리자 모드로 돌아가기 기능 추가?
+            System.out.println("어느 카테고리에 상품을 추가하시겠습니까?");
+            System.out.println("1. " + electronics.getCategoryName());
+            System.out.println("2. " + clothes.getCategoryName());
+            System.out.println("3. " + foods.getCategoryName());
+            System.out.print("번호를 입력해주세요: ");
+            switch (sc.nextInt()) {
+                case 1:
+                    electronics.productAdd(sc);
+                    return;
+                case 2:
+                    clothes.productAdd(sc);
+                    return;
+                case 3:
+                    foods.productAdd(sc);
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
+    // 관리자 모드 2번 상품 수정 페이지
+    private void adminProductEdit() {
+        System.out.print("수정할 상품명을 입력해주세요: ");
+        sc.nextLine();
+        String editProductName = sc.nextLine();
+        // TODO 불일치 시 예외 처리
+        List<Product> edit = all.searchProduct(editProductName);
+        while (true) {
+            System.out.println("현재 상품 정보: " + edit.get(0).presetNamPriDesInv());
+            System.out.println("\n어느 항목을 수정하시겠습니까?");
+            // TODO 0. 관리자 모드로 돌아가기? 구현?
+            System.out.println("1. 가격\n2. 설명\n3. 재고수량");
+            System.out.print("번호를 입력해주세요: ");
+            int productEditNumber = sc.nextInt();
+            if (productEditNumber == 1) {
+                System.out.println("현재 가격: " + edit.get(0).setPriceWon() + "원");
+                System.out.print("새로운 가격을 입력해주세요: ");
+                int editPrice = sc.nextInt();
+                System.out.println("\n" + edit.get(0).getName() + "의 가격이 " +
+                        edit.get(0).setPriceWon() + "원 -> " + String.format("%,d", editPrice) + "원으로 수정되었습니다.");
+                edit.get(0).setPrice(editPrice);
+                break;
+            } else if (productEditNumber == 2) {
+                System.out.println("현재 설명: " + edit.get(0).getDescription());
+                System.out.print("새로운 설명을 입력해주세요: ");
+                sc.nextLine();
+                String editDescription = sc.nextLine();
+                System.out.println("\n" + edit.get(0).getName() + "의 설명이 " +
+                        edit.get(0).getDescription() + " -> " + editDescription + "(으)로 수정되었습니다.");
+                edit.get(0).setDescription(editDescription);
+                break;
+            } else if (productEditNumber == 3) {
+                System.out.println("현재 재고수량: " + edit.get(0).getInventory() + "개");
+                System.out.print("새로운 재고수량을 입력해주세요: ");
+                int editInventory = sc.nextInt();
+                System.out.println("\n" + edit.get(0).getName() + "의 재고수량이 " +
+                        edit.get(0).getInventory() + "개 -> " + editInventory + "개로 수정되었습니다.");
+                edit.get(0).setInventory(editInventory);
+                break;
+            } else {
+                System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
+    // 관리잠 모드 3번 상품 삭제 페이지
+    private void adminProductDelete() {
+        // TODO 0. 관리자 모드 메인으로 돌아가기 구현? -> 구현 시 menuAndDelete에서 뒤로 가기 시 이 페이지로 오도록 구현
+        System.out.println("어느 카테고리의 상품을 삭제하시겠습니까?");
+        System.out.println("1. " + electronics.getCategoryName());
+        System.out.println("2. " + clothes.getCategoryName());
+        System.out.println("3. " + foods.getCategoryName());
+        System.out.print("번호를 입력해주세요: ");
+        switch (sc.nextInt()) {
+            case 1:
+                menuAndDelete(electronics);
+                break;
+            case 2:
+                menuAndDelete(clothes);
+                break;
+            case 3:
+                menuAndDelete(foods);
+                break;
+            default:
+                System.out.println("잘못된 입력입니다.");
+        }
+    }
+    // 카테고리 선택 후 상품 삭제 기능
     private void menuAndDelete(Category c) {
         while (true) {
             c.productMenu();
