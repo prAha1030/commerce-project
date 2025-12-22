@@ -1,7 +1,6 @@
 package commerce;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -213,7 +212,7 @@ public class CommerceSystem {
         while (failCount <= 2) {
             System.out.print("관리자 비밀번호를 입력해주세요: ");
             String password = sc.next();
-            // 현재 관리자 비번 admin123 / TODO 관리자 비밀번호 설정 기능 구현
+            // 현재 관리자 비번 admin123
             if (password.equals("admin123")) {
                 while (true) {
                     System.out.println("[ 관리자 모드 ]");
